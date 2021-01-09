@@ -1,0 +1,147 @@
+\documentclass{article}
+
+\usepackage{amssymb}
+\usepackage{amsmath, amsthm, color}
+\usepackage[colorlinks]{hyperref}
+\usepackage{fullpage}
+\usepackage{verbatim}
+
+\usepackage{lineno}
+%\linenumbers
+
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+
+% % the following creates defns with the usual roman font, not in italics
+\newtheorem{definition}{Definition}
+\newtheorem{fact}{Fact}[section]
+\newtheorem{assumption}{Assumption}
+
+% Not in italics
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% WIDEBAR COMMAND
+\newlength{\widebarargwidth}
+\newlength{\widebarargheight}
+\newlength{\widebarargdepth}
+\DeclareRobustCommand{\widebar}[1]{%
+  \settowidth{\widebarargwidth}{\ensuremath{#1}}%
+  \settoheight{\widebarargheight}{\ensuremath{#1}}%
+  \settodepth{\widebarargdepth}{\ensuremath{#1}}%
+  \addtolength{\widebarargwidth}{-0.3\widebarargheight}%
+  \addtolength{\widebarargwidth}{-0.3\widebarargdepth}%
+  \makebox[0pt][l]{\hspace{0.3\widebarargheight}%
+    \hspace{0.3\widebarargdepth}%
+    \addtolength{\widebarargheight}{0.3ex}%
+    \rule[\widebarargheight]{0.95\widebarargwidth}{0.1ex}}%
+  {#1}}
+
+% Notational convenience
+
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\mprob}{\ensuremath{\mathbb{P}}}
+\newcommand{\scriptW}{\ensuremath{\mathcal{W}}}
+\newcommand{\real}{\ensuremath{\mathbb{R}}}
+\newcommand{\muhat}{\ensuremath{\widehat{\mu}}}
+\newcommand{\barw}{\ensuremath{\bar{w}}}
+\newcommand{\scriptE}{\ensuremath{\mathcal{E}}}
+\newcommand{\scriptT}{\ensuremath{\mathcal{T}}}
+\newcommand{\sigmatil}{\ensuremath{\widetilde{\sigma}}}
+\newcommand{\order}{\ensuremath{\mathcal{O}}}
+\newcommand{\scriptA}{\ensuremath{\mathcal{A}}}
+\newcommand{\mustar}{\ensuremath{\mu^*}}
+\newcommand{\thetabar}{\ensuremath{\widebar{\theta}}}
+\newcommand{\poly}{\ensuremath{\operatorname{poly}}}
+\newcommand{\Var}{\ensuremath{\operatorname{Var}}}
+\newcommand{\Otil}{\ensuremath{\widetilde{O}}}
+\newcommand{\sigmahat}{\ensuremath{\widehat{\sigma}}}
+\newcommand{\betastar}{\ensuremath{\beta^*}}
+\newcommand{\gammastar}{\ensuremath{\gamma^*}}
+\newcommand{\betahat}{\ensuremath{\widehat{\beta}}}
+\newcommand{\gammahat}{\ensuremath{\widehat{\gamma}}}
+\newcommand{\nuhat}{\ensuremath{\widehat{\nu}}}
+\newcommand{\xihat}{\ensuremath{\widehat{\xi}}}
+\newcommand{\supp}{\ensuremath{\operatorname{supp}}}
+\newcommand{\Ttil}{\ensuremath{\widetilde{T}}}
+\newcommand{\inprod}[2]{\ensuremath{\langle #1 , \, #2 \rangle}}
+\newcommand{\Ball}{\ensuremath{\mathbb{B}}}
+\newcommand{\Xtil}{\ensuremath{\widetilde{X}}}
+\newcommand{\Atil}{\ensuremath{\widetilde{A}}}
+\newcommand{\opnorm}[1]{\left|\!\left|\!\left|{#1}\right|\!\right|\!\right|}
+
+
+
+
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{xcolor}
+\usepackage{graphicx}
+% \title{A template for the \emph{arxiv} style}
+
+
+% \author{
+%   David S.~Hippocampus\thanks{Use footnote for providing further
+%     information about author (webpage, alternative
+%     address)---\emph{not} for acknowledging funding agencies.} \\
+%   Department of Computer Science\\
+%   Cranberry-Lemon University\\
+%   Pittsburgh, PA 15213 \\
+%   \texttt{hippo@cs.cranberry-lemon.edu} \\
+%   %% examples of more authors
+%   \And
+%  Elias D.~Striatum \\
+%   Department of Electrical Engineering\\
+%   Mount-Sheikh University\\
+%   Santa Narimana, Levand \\
+%   \texttt{stariate@ee.mount-sheikh.edu} \\
+%   %% \AND
+%   %% Coauthor \\
+%   %% Affiliation \\
+%   %% Address \\
+%   %% \texttt{email} \\
+%   %% \And
+%   %% Coauthor \\
+%   %% Affiliation \\
+%   %% Address \\
+%   %% \texttt{email} \\
+%   %% \And
+%   %% Coauthor \\
+%   %% Affiliation \\
+%   %% Address \\
+%   %% \texttt{email} \\
+% }
+
+\begin{document}
+% \maketitle
+
+% \begin{abstract}
+% \lipsum[1]
+% \end{abstract}
+
+
+% % keywords can be removed
+% \keywords{First keyword \and Second keyword \and More}
+
+1
+
+
+
+\end{document}
+
