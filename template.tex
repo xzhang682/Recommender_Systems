@@ -139,9 +139,57 @@
 % % keywords can be removed
 % \keywords{First keyword \and Second keyword \and More}
 
-1
+\section{User-User Collaborative Filtering}
 
+\subsection{Main Contents}
+References: An Algorithmic Framwork for Collaborative Filtering by Herlocker, Konstan, Borchers, and Riedl (Proc. SIGIR 1999).
 
+Let $U$ be a set of users and $I$ be a set of items. Suppose we have a collection of ratings $r_{u,i}$ for some user $u$ rating some item $i$. Note that the rating matrix $R$ is assumed to be sparse. A simple prediction score is defined as follow,
+\begin{align}
+    s(u,i) = \frac{\sum_{v \in U} r_{v, i} }{|U|}.
+\end{align}
+
+To weight the ratings differently, a variant is as follow
+\begin{align}
+    s(u,i) = \frac{\sum_{v \in U} r_{v, i} \cdot w_{u,v} }{\sum_{v\in U} w_{u, v}},
+\end{align}
+where $w_{u,v}$ is a similarity/weighting parameter between user $u$ and $v$. 
+
+For the problem that users have different rating scales, letting $\bar{r}_u$ be the average score for some user $u$, we can introduce the following variant,
+\begin{align}
+    s(u,i) = \bar{r}_{u} + \frac{\sum_{v\in U} (r_{v, i} - \bar{r}_v)}{|U|}.
+\end{align}
+
+Combining the two variants we get 
+\begin{align}
+    s(u,i) = \bar{r}_{u} + \frac{\sum_{v\in U} (r_{v, i} - \bar{r}_v) \cdot w_{u, v}}{\sum_{v\in U} w_{u, v}}.
+\end{align}
+In particular, the weighting parameter can be defined as the Pearson correlation which is defined as 
+\begin{align*}
+    w_{u,v} = \frac{\sum_{i \in I} (r_{u,i} - r_u)(r_{v,i} - r_v)}{\sigma_u \cdot \sigma_v}.
+\end{align*}
+
+UUCF is a personalized recommendations/predictions.
+
+The base assumptions of the UUCF are: Our tastes are either individually stable or move in sync with each other; Our system is scoped within a domain of agreement.
+
+The implementation issues locates on when the number of users and items are in large scale. In particular, given $m = |U|, n = |I|$, we have correlation between two users is $O(n)$; all correlations for a user is $O(mn)$; all pairwise correlation is $O(m^2n)$; recommendations take at least $O(mn)$. 
+
+There are lots of ways to make computation practical: more persistent neighborhoods ($m \to k$); cached or incremental correlations.
+
+\subsection{Configuring User-User Collaborative Filtering}
+\paragraph{Selecting Neighborhoods:}
+We can use all the neighbors; we can threshold similarity or distance, say 0.1 fraction of neighbors; we can random pick some number of neighbors; we can pick top-N neighbors by similarity or distance; we can also cluster and users and define neighbors. 
+
+In theory, we want more neighbors. But in practice, noise can be made from dissimilar neighbors decreases usefulness. \# neighbors between 25 and 100 is often used.
+
+\paragraph{Scoring Items from Neighborhoods:} We can use average scores or weighted average. 
+
+\paragraph{Normalizing Data:} The reason doing normalization is because users rate differently (in scale). We can substract user mean rating or convert to z-score or substract item or item-user mean as we did in the main contents. 
+
+\paragraph{Computing Similarities:} 1. Pearson correlation (Little data will make the similarity go to 1); 2. Spearman rank correlation; 3. Cosine similarity. 
+
+\paragraph{Good Baseline Configuration:} Top N neighbors ($\sim$30); weighted averaging; user-mean or z-score normalization cosine similarity over normalized ratings.
 
 \end{document}
 
