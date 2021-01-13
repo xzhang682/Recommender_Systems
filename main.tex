@@ -7,6 +7,16 @@
 \usepackage{verbatim}
 
 \usepackage{lineno}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=black,
+    pdftitle={Sharelatex Example},
+    bookmarks=true,
+    pdfpagemode=FullScreen,
+    }
 %\linenumbers
 
 
@@ -93,9 +103,10 @@
 \usepackage{lipsum}
 \usepackage{xcolor}
 \usepackage{graphicx}
-% \title{A template for the \emph{arxiv} style}
+\title{Recommender Systems Summary}
 
 
+\author{Xiaomin Zhang $\quad $ \href{mailto:xzhang682@wisc.edu}{xzhang682@wisc.edu} }
 % \author{
 %   David S.~Hippocampus\thanks{Use footnote for providing further
 %     information about author (webpage, alternative
@@ -129,7 +140,7 @@
 % }
 
 \begin{document}
-% \maketitle
+\maketitle
 
 % \begin{abstract}
 % \lipsum[1]
@@ -142,7 +153,7 @@
 \section{User-User Collaborative Filtering}
 
 \subsection{Main Contents}
-References: An Algorithmic Framwork for Collaborative Filtering by Herlocker, Konstan, Borchers, and Riedl (Proc. SIGIR 1999).
+\textbf{References:} An Algorithmic Framwork for Collaborative Filtering by Herlocker, Konstan, Borchers, and Riedl (Proc. SIGIR 1999).
 
 Let $U$ be a set of users and $I$ be a set of items. Suppose we have a collection of ratings $r_{u,i}$ for some user $u$ rating some item $i$. Note that the rating matrix $R$ is assumed to be sparse. A simple prediction score is defined as follow,
 \begin{align}
@@ -191,5 +202,38 @@ In theory, we want more neighbors. But in practice, noise can be made from dissi
 
 \paragraph{Good Baseline Configuration:} Top N neighbors ($\sim$30); weighted averaging; user-mean or z-score normalization cosine similarity over normalized ratings.
 
+\section{Item-Item Collaborative Filtering}
+\paragraph{Motivations}
+UUCF was great. But when the item sets is very large, the number of products that given customer would have rated was often way too small. Then a user simply didn't have anything in common with anybody else, which makes UUCF recommends nothing. Here comes a IICF when the number of items is relatively large or could be larger than the number of customers. Besides, recall the pairwise correlation computations in UUCF is $O(m^2 n)$, where $m$ is the number of users. This will be very expensive when $m$ is large. Even incremental approaches were expensive. And user profiles could change quickly so we need to compute in real time to keep users happy. 
+
+\textbf{References:} Badrul Sarwar, George Karypis, Joseph Konstan, and John Riedl. 2001. Item‐based collaborative filtering recommendation algorithms. In Proceedings of the 10th international conference on World Wide Web (WWW '01). ACM, New York, NY, USA, 285‐295.
+
+\paragraph{Insight} Item-Item similarity is fairly stable, meaning for example, people like white legal pads is very likely to like yellow legal pads as well. Average item has many more ratings than an average user. Intuitively, items don't generally change rapidly -- at least not in ratings space (special case for time-bound items).
+
+\paragraph{Benefits of Item-Item} 1. It actually works quite well in predicting accuracy and performs well on top-N predictions; 2. It has efficient implementation at least in cases where $|U| >> |I|$ and it has benefits of precomputability; 3. It has broad applicability and flexibility -- as easy to apply to a shopping cart as to a user profile. 
+
+\paragraph{Core assumptions/limitations} Item-item relationships need to be stable (could have special cases that are difficult, e.g., calendars, short-lived books, Christmas trees, etc.). The main limitation/complaint is lower serendipity which may appear in UUCF. 
+
+\subsection{Main Contents}
+Two step process: 1. compute similarity between pairs of items, such as correlation or cosine of item rating vectors; 2. predict user-item rating using for instances, weighted sum of item neighbors or linear regression.
+
+Notations are used in the same way in UUCF.
+\begin{align*}
+    s(u,i) = \frac{\sum_{j \in N} w_{i,j} r_{u,i}}{\sum_{j \in N} |w_{i,j}|},
+\end{align*}
+where $w_{i,j}$ now is the similarity between two items $i$ and $j$, which can be computed in the following ways.
+\begin{align*}
+    w_{i,j} = sim(i,j) = cos(\vec{\hat{r}}_i, \vec{\hat{r}}_j) = \frac{\vec{\hat{r}}_i \cdot \vec{\hat{r}}_j}{\|\vec{\hat{r}}_i\|_2 \|\vec{\hat{r}}_j\|_2} = \frac{\sum_u \hat{r}_{u,i} \hat{r}_{u,j}}{\sqrt{\sum_u \hat{r}_{u,i}^2}\sqrt{\sum_u \hat{r}_{u,j}^2}} = \frac{\sum_u (r_{u,i}-\bar{r}_i) (r_{u,j}-\bar{r}_j)}{\sqrt{\sum_u (r_{u,i}-\bar{r}_i)^2}\sqrt{\sum_u (r_{u,j}-\bar{r}_j)^2}}.
+\end{align*}
+Now the next question is how to to pick the neighbors $N(i;u)$. The most simple way is probably that we can look at the $k$ most similar items to $i$ that $u$ has rated. A good value of $k$ is important. A small k causes inaccurate scores; a large $k$ introduces noise. Usually, we can choose $k=20$. Combining these together, we get 
+\begin{align*}
+    s(u,i) = \frac{\sum_{j \in N(i;u)} w_{i,j} (r_{u,j} - \bar{r}_j)}{\sum_{j \in N(i;u)}|w_{i,j}|} + \bar{r}_i.
+\end{align*}
+
+\paragraph{Computation} We can pre-compute similarities for all pairs of items. Naively, the cost is $O(|I|^2)$. In face, we don't need to keep the whole $I^2$ model. We may just store the positive similarity and then clear all but $M >> k$ number of largest values.
+
+\paragraph{IICF extension} We can incorporate user trustworthiness into item relatedness computation: $w_{i,j} = \frac{\sum_u p_u \hat{r}_{u,i} \hat{r}_{u,j}}{ \sqrt{\sum_u p_u \hat{r}_{u,i}^2}\sqrt{\sum_u p_u \hat{r}_{u,j}^2}}$. We can also incorporate the importance of the items, say papers and Page Rank. The similarity can be also learnt directly ML method. 
+
+\paragraph{Strengths and weaknesses of IICF} Item-Item can be more efficient than User-User; Item-Item is an aggregated product-association recommender. Amazon used Item-Item widely. But MovieLens complained that the recommendation is too obvious. Item-Item is very difficult to discover highly different items to recommend; while User-User by default will elevate items that a close neighbor lovers, even without much evidence. Another consequence was that Item-Item predictions tended to be less extreme (since they were grounded in more data).
 \end{document}
 
